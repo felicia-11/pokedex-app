@@ -16,11 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className="relative flex w-full items-center bg-white p-4 justify-start gap-2 pokedex-main-color text-white lg:flex-wrap lg:px-8">
+        <header className="relative flex w-full items-center p-4 justify-start gap-2 bg-rose-700 text-white lg:flex-wrap lg:px-8">
           <Link href="/">
             <h2 className="font-bold">POKEDEX</h2>
           </Link>
-        </div>
+        </header>
         {children}
       </body>
     </html>
