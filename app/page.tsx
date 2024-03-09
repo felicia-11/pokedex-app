@@ -8,7 +8,8 @@ import {
   MdNavigateBefore,
   MdOutlineArrowCircleRight,
 } from 'react-icons/md';
-import { capitalizeEachFirstLetter } from './helper';
+import Link from 'next/link';
+import { capitalizeEachFirstLetter, replaceCharWithSpaces } from './helper';
 
 export default function Home() {
   const [pokemonList, setPokemonList] = useState<any[]>([]);
@@ -28,7 +29,7 @@ export default function Home() {
     lastData: 0,
   });
 
-  async function handlePagination(key: string) {
+  async function fetchList(key: string) {
     const { prevParams, nextParams, count } = meta;
     let queryParams: string = '';
 
@@ -59,7 +60,8 @@ export default function Home() {
       const offset: number = Number(params.get('offset'));
       const formattedList = results.map((val: { name: string, url: string }) => ({
         ...val,
-        name: capitalizeEachFirstLetter(val.name),
+        id: val.name,
+        name: capitalizeEachFirstLetter(replaceCharWithSpaces(val.name, '-')),
       }));
 
       setPokemonList(formattedList);
@@ -77,11 +79,11 @@ export default function Home() {
   };
 
   useEffect(() => {
-    handlePagination('');
+    fetchList('');
   }, []);
 
   return (
-    <main className="min-h-screen p-8">
+    <main className="min-h-screen p-4 md:p-8">
       <article className="w-9/12 mx-auto flex flex-col gap-6">
         <section>
           <h1 className="text-center text-xl font-bold lg:text-left">Pokemon List</h1>
@@ -90,10 +92,14 @@ export default function Home() {
           {pokemonList.length > 0
             ? (
               pokemonList.map((pokemon, idx) => (
-                <div key={`${pokemon.name}-${idx}`} className="flex justify-between items-center p-4 border-solid border-4 border-rose-700 rounded-full cursor-pointer hover:backdrop-brightness-95 hover:shadow-md">
+                <Link
+                  key={`${pokemon.name}-${idx}`}
+                  href={`/pokemon-detail/${pokemon.id}`}
+                  className="flex justify-between items-center p-4 border-solid border-4 border-rose-700 rounded-full cursor-pointer hover:backdrop-brightness-95 hover:shadow-md"
+                >
                   <p>{pokemon.name}</p>
                   <MdOutlineArrowCircleRight className='text-2xl text-rose-700' />
-                </div>
+                </Link>
               ))
             ) : (
               <h1>Fetching data...</h1>
@@ -101,17 +107,17 @@ export default function Home() {
           }
         </section>
         <section className="w-fit mx-auto flex justify-between items-center gap-2">
-          <button onClick={() => handlePagination('first')} disabled={!meta.prevParams}>
+          <button onClick={() => fetchList('first')} disabled={!meta.prevParams}>
             <MdFirstPage className={`text-3xl ${!meta.prevParams ? 'text-gray-400' : 'hover:text-rose-700'}`} />
           </button>
-          <button onClick={() => handlePagination('prev')} disabled={!meta.prevParams}>
+          <button onClick={() => fetchList('prev')} disabled={!meta.prevParams}>
             <MdNavigateBefore className={`text-3xl ${!meta.prevParams ? 'text-gray-400' : 'hover:text-rose-700'}`} />
           </button>
           <p>{`${meta.firstData}-${meta.lastData} of ${meta.count}`}</p>
-          <button onClick={() => handlePagination('next')} disabled={!meta.nextParams}>
+          <button onClick={() => fetchList('next')} disabled={!meta.nextParams}>
             <MdNavigateNext className={`text-3xl ${!meta.nextParams ? 'text-gray-400' : 'hover:text-rose-700'}`} />
           </button>
-          <button onClick={() => handlePagination('last')} disabled={!meta.nextParams}>
+          <button onClick={() => fetchList('last')} disabled={!meta.nextParams}>
             <MdLastPage className={`text-3xl ${!meta.nextParams ? 'text-gray-400' : 'hover:text-rose-700'}`} />
           </button>
         </section>
