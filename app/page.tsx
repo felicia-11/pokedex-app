@@ -83,7 +83,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen p-4 md:p-8">
+    <main className="p-4 md:p-8">
       <article className="w-9/12 mx-auto flex flex-col gap-6">
         <section>
           <h1 className="text-center text-xl font-bold lg:text-left">Pokemon List</h1>

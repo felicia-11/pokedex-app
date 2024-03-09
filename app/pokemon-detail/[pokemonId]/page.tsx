@@ -37,7 +37,7 @@ export default function PokemonDetail({ params }: {
   }, []);
 
   return (
-    <main className="min-h-screen p-4 md:p-8">
+    <main className="p-4 md:p-8">
       <section className="w-10/12 mx-auto flex flex-col gap-6">
       {isLoading ? (
         <h1 className='text-center'>Fetching data...</h1>
